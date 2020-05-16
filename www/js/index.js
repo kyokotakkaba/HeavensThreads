@@ -29,13 +29,25 @@
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+        // splash screen timeout
+        setTimeout(function(){ 
+            //if logged in
+            if (localStorage.getItem("userid")!=null){
+                mainView.router.load({
+                    url:"home.html"
+                });
+            }else{
+                mainView.router.load({
+                    url:"welcome.html"
+                });
+            } 
+        }, 3000);
+
+        
     },
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        mainView.router.load({
-            url:"about.html?test=abcqwe"
-        });
         console.log('Received Event: ' + id);
     }
 };
