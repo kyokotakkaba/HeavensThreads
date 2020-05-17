@@ -34,11 +34,11 @@
             //if logged in
             if (localStorage.getItem("userid")!=null){
                 mainView.router.load({
-                    url:"home.html"
+                    url:"pages/home.html"
                 });
             }else{
                 mainView.router.load({
-                    url:"welcome.html"
+                    url:"pages/welcome/welcome.html"
                 });
             } 
         }, 3000);
@@ -49,7 +49,22 @@
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('Received Event: ' + id);
+    },
+
+
+
+    onBackKeyDown:function(event){
+        mainView.router.back();
     }
 };
 
 app.initialize();
+
+
+
+
+
+
+
+
+//custom function

@@ -5,6 +5,11 @@ var myApp = new Framework7({
   name: 'Heavens Threads',
   // App id
   id: 'com.rurumustudio.heavensthreads',
+
+  navbar: {
+    mdCenterTitle: true,
+  },
+
   // Enable swipe panel
   // panel: {
   //   swipe: 'left',
