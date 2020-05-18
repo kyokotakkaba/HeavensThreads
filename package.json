@@ -16,8 +16,8 @@
     "bootstrap": "^4.5.0",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
-    "cordova-plugin-play-games-services": "^1.1.2",
     "cordova-plugin-purchase": "^10.1.1",
+    "firebase": "^7.14.4",
     "framework7": "^5.7.2"
   },
   "devDependencies": {
@@ -26,12 +26,7 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-purchase": {},
-      "cordova-plugin-play-games-services": {
-        "APP_ID": "com.rurumustudio.heavensthreads",
-        "ANDROID_PLAY_SERVICES_GAMES_VERSION": "+",
-        "ANDROID_PLAY_SERVICES_PLUS_VERSION": "+"
-      }
+      "cordova-plugin-purchase": {}
     },
     "platforms": [
       "browser",

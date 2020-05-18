@@ -7,12 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-play-games-services": {
-      "APP_ID": "com.rurumustudio.heavensthreads",
-      "ANDROID_PLAY_SERVICES_GAMES_VERSION": "+",
-      "ANDROID_PLAY_SERVICES_PLUS_VERSION": "+",
-      "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
-    },
     "cordova-plugin-purchase": {
       "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
     },

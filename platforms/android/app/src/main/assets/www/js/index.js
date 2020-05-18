@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var app = {
+ var app = {
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -29,19 +29,42 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+        // splash screen timeout
+        setTimeout(function(){ 
+            //if logged in
+            if (localStorage.getItem("userid")!=null){
+                mainView.router.load({
+                    url:"pages/home.html"
+                });
+            }else{
+                mainView.router.load({
+                    url:"pages/welcome/welcome.html"
+                });
+            } 
+        }, 3000);
+
+        
     },
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
         console.log('Received Event: ' + id);
+    },
+
+
+
+    onBackKeyDown:function(event){
+        mainView.router.back();
     }
 };
 
 app.initialize();
+
+
+
+
+
+
+
+
+//custom function

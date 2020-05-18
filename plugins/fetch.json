@@ -14,15 +14,5 @@
     },
     "is_top_level": true,
     "variables": {}
-  },
-  "cordova-plugin-play-games-services": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-play-games-services"
-    },
-    "is_top_level": true,
-    "variables": {
-      "APP_ID": "com.rurumustudio.heavensthreads"
-    }
   }
 }
