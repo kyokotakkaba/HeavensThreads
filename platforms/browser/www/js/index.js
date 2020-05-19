@@ -32,7 +32,7 @@
         // splash screen timeout
         setTimeout(function(){ 
             //if logged in
-            if (localStorage.getItem("userid")!=null){
+            if (localStorage.getItem("username")!=null){
                 mainView.router.load({
                     url:"pages/home.html"
                 });
@@ -68,3 +68,11 @@ app.initialize();
 
 
 //custom function
+function escapeHtml(unsafe) {
+    return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
