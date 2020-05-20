@@ -5,9 +5,33 @@
   },
   "config_munge": {
     "files": {
+      "AndroidManifest.xml": {
+        "parents": {
+          "/manifest/application": [
+            {
+              "xml": "<meta-data android:name=\"com.google.android.gms.ads.APPLICATION_ID\" android:value=\"ca-app-pub-6323318809649357~5225077496\" />",
+              "count": 1
+            },
+            {
+              "xml": "<meta-data android:name=\"com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT\" android:value=\"true\" />",
+              "count": 1
+            }
+          ],
+          "/*": [
+            {
+              "xml": "<uses-permission android:name=\"com.android.vending.BILLING\" />",
+              "count": 1
+            }
+          ]
+        }
+      },
       "res/xml/config.xml": {
         "parents": {
           "/*": [
+            {
+              "xml": "<feature name=\"AdMob\"><param name=\"android-package\" value=\"admob.plugin.AdMob\" /></feature>",
+              "count": 1
+            },
             {
               "xml": "<feature name=\"InAppBillingPlugin\"><param name=\"android-package\" value=\"cc.fovea.PurchasePlugin\" /></feature>",
               "count": 1
@@ -18,27 +42,15 @@
             }
           ]
         }
-      },
-      "res/values/strings.xml": {
-        "parents": {
-          "/resources": []
-        }
-      },
-      "AndroidManifest.xml": {
-        "parents": {
-          "/manifest/application": [],
-          "/manifest": [],
-          "/*": [
-            {
-              "xml": "<uses-permission android:name=\"com.android.vending.BILLING\" />",
-              "count": 1
-            }
-          ]
-        }
       }
     }
   },
   "installed_plugins": {
+    "cordova-admob-plus": {
+      "APP_ID_ANDROID": "ca-app-pub-6323318809649357~5225077496",
+      "PLAY_SERVICES_VERSION": "19.0.1",
+      "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
+    },
     "cordova-plugin-purchase": {
       "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
     },
@@ -49,6 +61,14 @@
   "dependent_plugins": {},
   "modules": [
     {
+      "id": "cordova-admob-plus.AdMob",
+      "file": "plugins/cordova-admob-plus/www/admob.js",
+      "pluginId": "cordova-admob-plus",
+      "clobbers": [
+        "admob"
+      ]
+    },
+    {
       "id": "cordova-plugin-purchase.InAppBillingPlugin",
       "file": "plugins/cordova-plugin-purchase/www/store-android.js",
       "pluginId": "cordova-plugin-purchase",
@@ -58,6 +78,7 @@
     }
   ],
   "plugin_metadata": {
+    "cordova-admob-plus": "0.0.0",
     "cordova-plugin-purchase": "10.1.1",
     "cordova-plugin-whitelist": "1.3.4"
   }

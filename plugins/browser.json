@@ -12,6 +12,9 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
+    },
+    "cordova-admob-plus": {
+      "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
     }
   },
   "dependent_plugins": {}

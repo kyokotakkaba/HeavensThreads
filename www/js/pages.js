@@ -108,6 +108,20 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e, page) {
 $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 	mainView.router.clearPreviousHistory();
 	$$('#testcontent').html("CURRENT USER: "+ localStorage.getItem("username")+ "<br>" +localStorage.getItem("alasanmendaftar"));
+	
+
+	$$('#rewardvideoads').on('click', function(){
+		myApp.preloader.show();
+		admob.rewardVideo.load({
+			id: {
+				android: 'ca-app-pub-3940256099942544/5224354917',
+				ios: 'ca-app-pub-3940256099942544/5224354917',
+			},
+		}).then(() => admob.rewardVideo.show()).catch(console.log)
+
+	});
+
+
 	$$('#logoutbutton').on('click', function(){
 		localStorage.clear();
 		mainView.router.load({

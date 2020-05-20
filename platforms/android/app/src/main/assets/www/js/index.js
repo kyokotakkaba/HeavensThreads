@@ -20,7 +20,17 @@
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        document.addEventListener("backbutton", this.onBackKeyDown, false);
+        document.addEventListener('backbutton', this.onBackKeyDown, false);
+        document.addEventListener('admob.reward_video.reward', () => {
+            myApp.dialog.alert("Berhasil memutar video reward");
+        });
+        document.addEventListener('admob.reward_video.load', () => {
+            myApp.preloader.hide();
+        });
+        document.addEventListener('admob.reward_video.load_fail', () => {
+            myApp.preloader.hide();
+            myApp.dialog.alert("Gagal memutar video");
+        });
     },
 
     // deviceready Event Handler
@@ -32,7 +42,7 @@
         // splash screen timeout
         setTimeout(function(){ 
             //if logged in
-            if (localStorage.getItem("userid")!=null){
+            if (localStorage.getItem("username")!=null){
                 mainView.router.load({
                     url:"pages/home.html"
                 });
@@ -54,7 +64,13 @@
 
 
     onBackKeyDown:function(event){
-        mainView.router.back();
+        if (mainView.history.length > 1){
+            mainView.router.back();    
+        }else{
+            myApp.dialog.confirm('Yakin ingin keluar?', function () {
+                navigator.app.exitApp();
+            });
+        }
     }
 };
 
@@ -68,3 +84,11 @@ app.initialize();
 
 
 //custom function
+function escapeHtml(unsafe) {
+    return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
