@@ -22,7 +22,8 @@
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         document.addEventListener('backbutton', this.onBackKeyDown, false);
         document.addEventListener('admob.reward_video.reward', () => {
-            myApp.dialog.alert("Berhasil memutar video reward");
+            myApp.dialog.alert("Anda mendapatkan 1 Gem");
+            addGem(1);
         });
         document.addEventListener('admob.reward_video.load', () => {
             myApp.preloader.hide();
@@ -67,7 +68,7 @@
         if (mainView.history.length > 1){
             mainView.router.back();    
         }else{
-            app.dialog.confirm('Yakin ingin keluar?', function () {
+            myApp.dialog.confirm('Yakin ingin keluar?', function () {
                 navigator.app.exitApp();
             });
         }
@@ -91,4 +92,54 @@ function escapeHtml(unsafe) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function syncLoad(username, onsuccess, onerror){
+    myApp.preloader.show();
+    db.collection("users").doc(username).get().then(function(doc) {
+        if (doc.exists) {
+            myApp.preloader.hide();
+            localStorage.setItem("gem",doc.data().gem);
+            onsuccess();
+        } else {
+            myApp.preloader.hide();
+            myApp.dialog.alert("Error: username tidak ada");
+            onerror();
+        }
+    }).catch(function(error) {
+        myApp.preloader.hide();
+        myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);
+        onerror();
+    });
+}
+
+function syncSave(username){
+    myApp.preloader.show();
+    db.collection("users").doc(username).get().then(function(doc) {
+        if (doc.exists) {
+            db.collection("users").doc(username).update({
+                gem: parseInt(localStorage.getItem("gem")),
+            }).then(function() {
+                myApp.preloader.hide();
+                myApp.dialog.alert("Save berhasil");
+            }).catch(function(error) {
+                myApp.preloader.hide();
+                myApp.dialog.alert("Save gagal<br><br>"+ error);
+            });
+        } else {
+            myApp.preloader.hide();
+            myApp.dialog.alert("Error: username tidak ada");
+        }
+    }).catch(function(error) {
+        myApp.preloader.hide();
+        myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);
+    });
+}
+
+
+function addGem(value){
+    gems = parseInt(localStorage.getItem("gem")) + value;
+    localStorage.setItem("gem",gems);
+    $$('#gem').html("gem: "+ localStorage.getItem("gem"));
+    syncSave(localStorage.getItem("username"));
 }

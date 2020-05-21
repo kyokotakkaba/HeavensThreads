@@ -33,6 +33,7 @@ $$(document).on('page:init', '.page[data-name="register"]', function (e, page) {
 							db.collection("users").doc(formData.username).set({
 								username: formData.username,
 								password: formData.password,
+								gem: 0,
 								survey: {
 									alasanmendaftar: formData.alasanmendaftar,
 									apakahmembusuk: formData.apakahmembusuk,
@@ -44,7 +45,7 @@ $$(document).on('page:init', '.page[data-name="register"]', function (e, page) {
 								myApp.preloader.hide();
 								myApp.dialog.alert("Registrasi Berhasil");
 								localStorage.setItem("username",formData.username);
-								localStorage.setItem("alasanmendaftar",formData.alasanmendaftar);
+								localStorage.setItem("gem",0);
 								mainView.router.load({
 									url:"pages/home.html"
 								});
@@ -79,12 +80,14 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e, page) {
 				if (doc.exists) {
 					if (doc.data().password == formData.password) {
 						myApp.preloader.hide();
-						myApp.dialog.alert("Login Berhasil");
 						localStorage.setItem("username",formData.username);
-						localStorage.setItem("alasanmendaftar",doc.data().survey.alasanmendaftar);
-						mainView.router.load({
-							url:"pages/home.html"
-						});
+						syncLoad(formData.username, 
+							function(){
+								mainView.router.load({
+									url:"pages/home.html"
+								});
+							}, 
+							function(){});	
 					}else{
 						myApp.preloader.hide();
 						myApp.dialog.alert("Login Gagal");
@@ -107,8 +110,26 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e, page) {
 
 $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 	mainView.router.clearPreviousHistory();
-	$$('#testcontent').html("CURRENT USER: "+ localStorage.getItem("username")+ "<br>" +localStorage.getItem("alasanmendaftar"));
+	$$('#currentuser').html("CURRENT USER: "+ localStorage.getItem("username"));
+
+	//gem load
+	if (localStorage.getItem("gem")==null){
+		localStorage.setItem("gem",0);
+	} 
+	$$('#gem').html("gem: "+ localStorage.getItem("gem"));
 	
+
+	// $.get('files/test.txt', function(textData, status) {
+	// 	var aLines = textData.split("\n")
+	// 	$.each(aLines, function(n, sLine) {
+	// 		$('#textFromFile').append( sLine + '<br>');
+	// 	});
+	// }, 'text');
+
+	$$('#gem+1').on('click', function(){
+		addGem(1);
+	});
+
 
 	$$('#rewardvideoads').on('click', function(){
 		myApp.preloader.show();
