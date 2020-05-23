@@ -24,6 +24,9 @@
         document.addEventListener('admob.reward_video.reward', () => {
             myApp.dialog.alert("Anda mendapatkan 1 Gem");
             addGem(1);
+            currentFreeGem = parseInt(localStorage.getItem("freeGemQuota")) - 1;
+            localStorage.setItem("freeGemQuota", currentFreeGem);
+            $$('#rewardvideoads').html("Watch Video for free gem : "+ localStorage.getItem("freeGemQuota"));
         });
         document.addEventListener('admob.reward_video.load', () => {
             myApp.preloader.hide();
@@ -40,6 +43,7 @@
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+        disabledback = false;
         // splash screen timeout
         setTimeout(function(){ 
             //if logged in
@@ -65,13 +69,20 @@
 
 
     onBackKeyDown:function(event){
-        if (mainView.history.length > 1){
-            mainView.router.back();    
-        }else{
-            myApp.dialog.confirm('Yakin ingin keluar?', function () {
-                navigator.app.exitApp();
-            });
-        }
+        if (!disabledback) {
+            disabledback = true;
+            if (mainView.history.length > 1){
+                mainView.router.back();
+                disabledback = false;    
+            }else{
+                myApp.dialog.confirm('Yakin ingin keluar?', function () {
+                    disabledback = false;
+                    navigator.app.exitApp();
+                }, function () {
+                    disabledback = false;
+                });
+            }
+        } 
     }
 };
 
@@ -121,10 +132,10 @@ function syncSave(username){
                 gem: parseInt(localStorage.getItem("gem")),
             }).then(function() {
                 myApp.preloader.hide();
-                myApp.dialog.alert("Save berhasil");
+                // myApp.dialog.alert("Save berhasil");
             }).catch(function(error) {
                 myApp.preloader.hide();
-                myApp.dialog.alert("Save gagal<br><br>"+ error);
+                // myApp.dialog.alert("Save gagal<br><br>"+ error);
             });
         } else {
             myApp.preloader.hide();
@@ -142,4 +153,12 @@ function addGem(value){
     localStorage.setItem("gem",gems);
     $$('#gem').html("gem: "+ localStorage.getItem("gem"));
     syncSave(localStorage.getItem("username"));
+}
+
+
+function refreshFreeGem(){
+    nextday = new Date((new Date()).valueOf() + 1000*3600*24);
+    nextday.setHours(0,0,0,0);
+    localStorage.setItem("freeGemTimer", nextday);
+    localStorage.setItem("freeGemQuota", 2);
 }

@@ -24,6 +24,9 @@
         document.addEventListener('admob.reward_video.reward', () => {
             myApp.dialog.alert("Anda mendapatkan 1 Gem");
             addGem(1);
+            currentFreeGem = parseInt(localStorage.getItem("freeGemQuota")) - 1;
+            localStorage.setItem("freeGemQuota", currentFreeGem);
+            $$('#rewardvideoads').html("Watch Video for free gem : "+ localStorage.getItem("freeGemQuota"));
         });
         document.addEventListener('admob.reward_video.load', () => {
             myApp.preloader.hide();
@@ -150,4 +153,12 @@ function addGem(value){
     localStorage.setItem("gem",gems);
     $$('#gem').html("gem: "+ localStorage.getItem("gem"));
     syncSave(localStorage.getItem("username"));
+}
+
+
+function refreshFreeGem(){
+    nextday = new Date((new Date()).valueOf() + 1000*3600*24);
+    nextday.setHours(0,0,0,0);
+    localStorage.setItem("freeGemTimer", nextday);
+    localStorage.setItem("freeGemQuota", 2);
 }

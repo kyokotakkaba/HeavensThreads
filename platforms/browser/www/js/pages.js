@@ -111,6 +111,7 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e, page) {
 $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 	mainView.router.clearPreviousHistory();
 	$$('#currentuser').html("CURRENT USER: "+ localStorage.getItem("username"));
+	$$('#rewardvideoads').html("Watch Video for free gem : "+ localStorage.getItem("freeGemQuota"));
 
 	//gem load
 	if (localStorage.getItem("gem")==null){
@@ -118,6 +119,17 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 	} 
 	$$('#gem').html("gem: "+ localStorage.getItem("gem"));
 	
+	if (localStorage.getItem("freeGemTimer")==null){
+		refreshFreeGem();
+	}else{
+		now = new Date().getTime();
+		refreshdate = new Date(localStorage.getItem("freeGemTimer")).getTime();
+		distance = refreshdate - now;
+		$$('#freecountdown').html("Countdown to refresh: "+ distance/1000);
+		if (distance < 0) {
+			refreshFreeGem();
+		}
+	}
 
 	// $.get('files/test.txt', function(textData, status) {
 	// 	var aLines = textData.split("\n")
@@ -126,20 +138,35 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 	// 	});
 	// }, 'text');
 
+	$.getJSON("files/threadlist.json", function(data) {
+		content = "";
+		data.forEach(function(cat){
+			content = content + "<div><h3>" + cat.category + "</h3><ul>";
+			cat.threads.forEach(function(thr){
+				content = content + "<li>" + thr.title + "</li>";
+			});
+			content = content + "</ul></div>";
+		});
+		$$('#threads').append(content);
+	});
+
 	$$('#gem+1').on('click', function(){
 		addGem(1);
 	});
 
 
 	$$('#rewardvideoads').on('click', function(){
-		myApp.preloader.show();
-		admob.rewardVideo.load({
-			id: {
-				android: 'ca-app-pub-3940256099942544/5224354917',
-				ios: 'ca-app-pub-3940256099942544/5224354917',
-			},
-		}).then(() => admob.rewardVideo.show()).catch(console.log)
-
+		if (parseInt(localStorage.getItem("freeGemQuota"))>0){
+			myApp.preloader.show();
+			admob.rewardVideo.load({
+				id: {
+					android: 'ca-app-pub-3940256099942544/5224354917',
+					ios: 'ca-app-pub-3940256099942544/5224354917',
+				},
+			}).then(() => admob.rewardVideo.show()).catch(console.log)
+		}else{
+			myApp.dialog.alert("Gem gratis sudah habis. Silahkan coba lagi besok.");
+		}
 	});
 
 
