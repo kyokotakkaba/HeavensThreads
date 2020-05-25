@@ -162,3 +162,12 @@ function refreshFreeGem(){
     localStorage.setItem("freeGemTimer", nextday);
     localStorage.setItem("freeGemQuota", 2);
 }
+
+var threadlistData;
+function openThread(indexcat,indexthread){
+    myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
+}
+
+function lockedThread(indexcat,indexthread, price){
+    myApp.dialog.alert("Locked! Required "+price+" Gem to unlock<br>"+threadlistData[indexcat].threads[indexthread].fileid+".txt");
+}

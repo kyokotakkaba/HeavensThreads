@@ -124,7 +124,7 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 		now = new Date().getTime();
 		refreshdate = new Date(localStorage.getItem("freeGemTimer")).getTime();
 		distance = refreshdate - now;
-		$$('#freecountdown').html("Countdown to refresh: "+ distance/1000);
+		$$('#freecountdown').html("Countdown to refresh: "+ Math.ceil(distance/(1000*60*60)) + " hours");
 		if (distance < 0) {
 			refreshFreeGem();
 		}
@@ -141,12 +141,40 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 
 	$.getJSON("files/threadlist.json", function(data) {
 		content = "";
-		data.forEach(function(cat){
-			content = content + "<div><h3>" + cat.category + "</h3><ul>";
-			cat.threads.forEach(function(thr){
-				content = content + "<li>" + thr.title + "</li>";
+		threadlistData = data;
+		data.forEach(function(cat, idxcat){
+			content = content + 
+			"<div style='margin-top:5px'><h3>" + cat.category + "</h3>";
+			cat.threads.forEach(function(thr, idxthr){
+				content = content + 
+				"<div style='margin:10px;margin-left:5%'>" + 
+				"<div>" + thr.title + "</div>"+
+				"<div>" + thr.players.length + " pemain bergabung</div>"+
+				"<div> Posted by:" + thr.postedby + "</div>"+
+				"<div>";
+
+				thr.players.forEach(function(ply){
+					content = content +
+					"<span style='margin-right:2%'><img src='img/playericon/"+ply+".png' width='20px'></img> "+ply+" </span>";
+				});
+
+
+				if (thr.price>0) {
+					content = content + 
+					"<div>"+
+					"<button class='col button button-fill color-gray' onclick='lockedThread("+idxcat+","+idxthr+","+thr.price+")'>"+thr.price+" Gem to unlock</button>"+
+					"</div>";
+				}else{
+					content = content + 
+					"<div>"+
+					"<button class='col button button-fill color-black' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
+					"</div>";
+				}
+
+				content = content + 
+				"</div></div>";
 			});
-			content = content + "</ul></div>";
+			content = content + "</div>";
 		});
 		$$('#threads').append(content);
 	});
