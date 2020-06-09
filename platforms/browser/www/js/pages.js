@@ -124,7 +124,7 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 		now = new Date().getTime();
 		refreshdate = new Date(localStorage.getItem("freeGemTimer")).getTime();
 		distance = refreshdate - now;
-		$$('#freecountdown').html("Countdown to refresh: "+ Math.ceil(distance/(1000*60*60)) + "hours");
+		$$('#freecountdown').html("Countdown to refresh: "+ Math.ceil(distance/(1000*60*60)) + " hours");
 		if (distance < 0) {
 			refreshFreeGem();
 		}
@@ -139,19 +139,48 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 	// 	});
 	// }, 'text');
 
-	$.getJSON("files/threadlist.json", function(data) {
+	//first category must be showed
+	if (localStorage.getItem("categoryhide"+0)==null){
+		localStorage.setItem("categoryhide"+0,"show");
+	}
+	//first part must be showed
+	if (localStorage.getItem("parthide"+0+"|"+0)==null){
+		localStorage.setItem("parthide"+0+"|"+0,"show"); 
+	}
+
+	
+	$.getJSON("files/heaventhreadlist.json", function(data) {
 		content = "";
 		threadlistData = data;
 		data.forEach(function(cat, idxcat){
-			content = content + 
-			"<div style='margin-top:5px'><h3>" + cat.category + "</h3>";
-			cat.threads.forEach(function(thr, idxthr){
+			if (localStorage.getItem("categoryhide"+idxcat)=="show"){
 				content = content + 
-				"<div style='margin:10px;margin-left:5%'>" + 
-				"<div>" + thr.title + "</div>"+
-				"<div>" + thr.players.length + " pemain bergabung</div>"+
-				"<div> Posted by:" + thr.postedby + "</div>"+
-				"<div>";
+				"<div style='margin-top:5px' id='category"+idxcat+"'><h3>" + cat.category + "</h3>";
+			}else{
+				content = content + 
+				"<div style='margin-top:5px' class='hide' id='category"+idxcat+"'><h3>" + cat.category + "</h3>";
+			}
+			
+			cat.threads.forEach(function(thr, idxthr){
+
+				if (localStorage.getItem("parthide"+idxcat+"|"+idxthr)=="show"){
+					content = content + 
+					"<div style='margin:10px;margin-left:5%' id='part"+idxcat+"|"+idxthr+"'>" + 
+					"<div>" + thr.title + "</div>"+
+					"<div>" + thr.players.length + " pemain bergabung</div>"+
+					"<div> Posted by:" + thr.postedby + "</div>"+
+					"<div>";
+				}else{
+					if (localStorage.getItem("parthide"+idxcat+"|"+idxthr)==null){
+						localStorage.setItem("parthide"+idxcat+"|"+idxthr,"hide");
+					}
+					content = content + 
+					"<div style='margin:10px;margin-left:5%' class='hide' id='part"+idxcat+"|"+idxthr+"'>" + 
+					"<div>" + thr.title + "</div>"+
+					"<div>" + thr.players.length + " pemain bergabung</div>"+
+					"<div> Posted by:" + thr.postedby + "</div>"+
+					"<div>";
+				}
 
 				thr.players.forEach(function(ply){
 					content = content +
@@ -159,15 +188,19 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 				});
 
 
-				if (thr.price>0) {
+				if (thr.price<=0 || localStorage.getItem("partlock"+idxcat+"|"+idxthr)=="unlock") {
 					content = content + 
 					"<div>"+
-					"<button class='col button button-fill color-gray' onclick='lockedThread("+idxcat+","+idxthr+","+thr.price+")'>"+thr.price+" Gem to unlock</button>"+
+					"<button class='col button button-fill color-black' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
 					"</div>";
 				}else{
 					content = content + 
 					"<div>"+
-					"<button class='col button button-fill color-black' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
+					"<button class='col button button-fill color-gray' onclick='lockedThread("+idxcat+","+idxthr+","+thr.price+")'>"+thr.price+" Gem to unlock</button>"+
+					"</div>";
+					content = content + 
+					"<div>"+
+					"<button class='col button button-fill color-black hide' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
 					"</div>";
 				}
 

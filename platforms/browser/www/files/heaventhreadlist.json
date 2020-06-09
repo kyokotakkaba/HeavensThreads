@@ -27,13 +27,6 @@
 				"postedby": "anonymous",
 				"players": [],
 				"price": 0
-			},
-			{
-				"title": "Ralph Burger",
-				"fileid": "SU5-Ralph",
-				"postedby": "anonymous",
-				"players": [],
-				"price": 2
 			}
 		]
 	},
@@ -65,6 +58,20 @@
 				"fileid": "HW4-changeworld",
 				"postedby": "Rustysword",
 				"players": ["AsOuReN", "SakuraFei", "Aririkushishifu"],
+				"price": 10
+			},
+			{
+				"title": "Thread 5: Share Your World (2)",
+				"fileid": "HW5-shareworld2",
+				"postedby": "Heavenwing4",
+				"players": ["AsOuReN", "SakuraFei", "Aririkushishifu"],
+				"price": 10
+			},
+			{
+				"title": "Thread 6: HELL!",
+				"fileid": "HW6-hell",
+				"postedby": "Aririkushishifu",
+				"players": ["AsOuReN", "SakuraFei"],
 				"price": 10
 			}
 		]

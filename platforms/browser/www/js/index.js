@@ -166,6 +166,15 @@ function refreshFreeGem(){
 var threadlistData;
 function openThread(indexcat,indexthread){
     myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
+    if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))==null){
+        console.log("#category"+(indexcat+1));
+        console.log("#part"+(indexcat+1)+"|"+0);
+        $$("#category"+(indexcat+1)).removeClass("hide");
+        $$("#part"+(indexcat+1)+"|"+0).removeClass("hide");
+    }else{
+        $$("#part"+indexcat+"|"+(indexthread+1)).removeClass("hide");
+    }
+    
 }
 
 function lockedThread(indexcat,indexthread, price){
