@@ -110,7 +110,9 @@ function syncLoad(username, onsuccess, onerror){
     db.collection("users").doc(username).get().then(function(doc) {
         if (doc.exists) {
             myApp.preloader.hide();
-            localStorage.setItem("gem",doc.data().gem);
+            for (var i=0;i<Object.keys(doc.data().progress).length;i++){
+                localStorage.setItem(Object.keys(doc.data().progress)[i],Object.values(doc.data().progress)[i]);
+            }
             onsuccess();
         } else {
             myApp.preloader.hide();
@@ -124,18 +126,23 @@ function syncLoad(username, onsuccess, onerror){
     });
 }
 
-function syncSave(username){
-    myApp.preloader.show();
+function syncSave(username, loading){
+    if (loading) {myApp.preloader.show();}
     db.collection("users").doc(username).get().then(function(doc) {
         if (doc.exists) {
+            data={};
+            for (var i=0;i<localStorage.length;i++){
+                data[localStorage.key(i)]=localStorage.getItem(localStorage.key(i));
+            }
             db.collection("users").doc(username).update({
-                gem: parseInt(localStorage.getItem("gem")),
+                progress: data,
             }).then(function() {
                 myApp.preloader.hide();
-                // myApp.dialog.alert("Save berhasil");
+                console.log("Save berhasil");
             }).catch(function(error) {
                 myApp.preloader.hide();
-                // myApp.dialog.alert("Save gagal<br><br>"+ error);
+                console.log("Save gagal<br><br>"+ error);
+                if (loading){myApp.dialog.alert("Save gagal<br><br>"+ error);}
             });
         } else {
             myApp.preloader.hide();
@@ -143,7 +150,9 @@ function syncSave(username){
         }
     }).catch(function(error) {
         myApp.preloader.hide();
-        myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);
+        console.log("Gagal sinkronisasi<br><br>" + error);
+        if (loading) {myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);}
+        
     });
 }
 
@@ -152,7 +161,7 @@ function addGem(value){
     gems = parseInt(localStorage.getItem("gem")) + value;
     localStorage.setItem("gem",gems);
     $$('#gem').html("gem: "+ localStorage.getItem("gem"));
-    syncSave(localStorage.getItem("username"));
+    syncSave(localStorage.getItem("username"), true);
 }
 
 
@@ -167,12 +176,21 @@ var threadlistData;
 function openThread(indexcat,indexthread){
     myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
     if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))==null){
-        console.log("#category"+(indexcat+1));
-        console.log("#part"+(indexcat+1)+"|"+0);
         $$("#category"+(indexcat+1)).removeClass("hide");
         $$("#part"+(indexcat+1)+"|"+0).removeClass("hide");
+        if (localStorage.getItem("parthide"+(indexcat+1)+"|"+0)!="show" || localStorage.getItem("categoryhide"+(indexcat+1))!="show") {
+            localStorage.setItem("categoryhide"+(indexcat+1), "show");
+            localStorage.setItem("parthide"+(indexcat+1)+"|"+0, "show");
+            syncSave(localStorage.getItem("username"), false);
+        }
+        
     }else{
         $$("#part"+indexcat+"|"+(indexthread+1)).removeClass("hide");
+        if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))!="show") {
+            localStorage.setItem("parthide"+indexcat+"|"+(indexthread+1), "show");
+            syncSave(localStorage.getItem("username"), false);
+        }
+        
     }
     
 }

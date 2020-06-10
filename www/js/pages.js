@@ -33,7 +33,6 @@ $$(document).on('page:init', '.page[data-name="register"]', function (e, page) {
 							db.collection("users").doc(formData.username).set({
 								username: formData.username,
 								password: formData.password,
-								gem: 0,
 								survey: {
 									alasanmendaftar: formData.alasanmendaftar,
 									apakahmembusuk: formData.apakahmembusuk,
@@ -80,14 +79,16 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e, page) {
 				if (doc.exists) {
 					if (doc.data().password == formData.password) {
 						myApp.preloader.hide();
-						localStorage.setItem("username",formData.username);
 						syncLoad(formData.username, 
 							function(){
+								// localStorage.setItem("username",formData.username);
 								mainView.router.load({
 									url:"pages/home.html"
 								});
 							}, 
-							function(){});	
+							function(){
+								myApp.dialog.alert("Sinkronisasi Gagal");
+							});	
 					}else{
 						myApp.preloader.hide();
 						myApp.dialog.alert("Login Gagal");
