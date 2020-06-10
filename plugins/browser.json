@@ -7,13 +7,13 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-play-games-services": {
-      "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
-    },
     "cordova-plugin-purchase": {
       "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
     },
     "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
+    },
+    "cordova-admob-plus": {
       "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
     }
   },

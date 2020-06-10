@@ -7,10 +7,9 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-play-games-services": {
-      "APP_ID": "com.rurumustudio.heavensthreads",
-      "ANDROID_PLAY_SERVICES_GAMES_VERSION": "+",
-      "ANDROID_PLAY_SERVICES_PLUS_VERSION": "+",
+    "cordova-admob-plus": {
+      "APP_ID_ANDROID": "ca-app-pub-6323318809649357~5225077496",
+      "PLAY_SERVICES_VERSION": "19.0.1",
       "PACKAGE_NAME": "com.rurumustudio.heavensthreads"
     },
     "cordova-plugin-purchase": {

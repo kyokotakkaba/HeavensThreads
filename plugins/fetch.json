@@ -15,14 +15,15 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-play-games-services": {
+  "cordova-admob-plus": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-play-games-services"
+      "id": "cordova-admob-plus"
     },
     "is_top_level": true,
     "variables": {
-      "APP_ID": "com.rurumustudio.heavensthreads"
+      "APP_ID_ANDROID": "ca-app-pub-6323318809649357~5225077496",
+      "APP_ID_IOS": "ca-app-pub-6323318809649357~5225077496"
     }
   }
 }

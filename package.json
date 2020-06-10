@@ -14,10 +14,11 @@
   "license": "Apache-2.0",
   "dependencies": {
     "bootstrap": "^4.5.0",
+    "cordova-admob-plus": "^0.36.0",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
-    "cordova-plugin-play-games-services": "^1.1.2",
     "cordova-plugin-purchase": "^10.1.1",
+    "firebase": "^7.14.4",
     "framework7": "^5.7.2"
   },
   "devDependencies": {
@@ -27,10 +28,10 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-purchase": {},
-      "cordova-plugin-play-games-services": {
-        "APP_ID": "com.rurumustudio.heavensthreads",
-        "ANDROID_PLAY_SERVICES_GAMES_VERSION": "+",
-        "ANDROID_PLAY_SERVICES_PLUS_VERSION": "+"
+      "cordova-admob-plus": {
+        "APP_ID_ANDROID": "ca-app-pub-6323318809649357~5225077496",
+        "APP_ID_IOS": "ca-app-pub-6323318809649357~5225077496",
+        "PLAY_SERVICES_VERSION": "19.0.1"
       }
     },
     "platforms": [
