@@ -116,12 +116,12 @@ function syncLoad(username, onsuccess, onerror){
             onsuccess();
         } else {
             myApp.preloader.hide();
-            myApp.dialog.alert("Error: username tidak ada");
+            myApp.dialog.alert("Load Gagal: username tidak ada");
             onerror();
         }
     }).catch(function(error) {
         myApp.preloader.hide();
-        myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);
+        myApp.dialog.alert("Load gagal<br><br>" + error);
         onerror();
     });
 }
@@ -142,16 +142,16 @@ function syncSave(username, loading){
             }).catch(function(error) {
                 myApp.preloader.hide();
                 console.log("Save gagal<br><br>"+ error);
-                if (loading){myApp.dialog.alert("Save gagal<br><br>"+ error);}
+                // if (loading){myApp.dialog.alert("Save gagal<br><br>"+ error);}
             });
         } else {
             myApp.preloader.hide();
-            myApp.dialog.alert("Error: username tidak ada");
+            myApp.dialog.alert("Save gagal: username tidak ada");
         }
     }).catch(function(error) {
         myApp.preloader.hide();
-        console.log("Gagal sinkronisasi<br><br>" + error);
-        if (loading) {myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);}
+        console.log("Save gagal<br><br>" + error);
+        // if (loading) {myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);}
         
     });
 }
@@ -174,8 +174,6 @@ function refreshFreeGem(){
 
 var threadlistData;
 function openThread(indexcat,indexthread){
-    myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
-    //to do here
     if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))==null){
         $$("#category"+(indexcat+1)).removeClass("hide");
         $$("#part"+(indexcat+1)+"|"+0).removeClass("hide");
@@ -184,19 +182,32 @@ function openThread(indexcat,indexthread){
             localStorage.setItem("parthide"+(indexcat+1)+"|"+0, "show");
             syncSave(localStorage.getItem("username"), false);
         }
-        
     }else{
         $$("#part"+indexcat+"|"+(indexthread+1)).removeClass("hide");
         if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))!="show") {
             localStorage.setItem("parthide"+indexcat+"|"+(indexthread+1), "show");
             syncSave(localStorage.getItem("username"), false);
         }
-        
     }
+
+    myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
+    //to do here
     
 }
 
 function lockedThread(indexcat,indexthread, price){
-    myApp.dialog.alert("Locked! Required "+price+" Gem to unlock<br>"+threadlistData[indexcat].threads[indexthread].fileid+".txt");
-    //to do here
+    // myApp.dialog.alert("Locked! Required "+price+" Gem to unlock<br>"+threadlistData[indexcat].threads[indexthread].fileid+".txt");
+    if (parseInt(localStorage.getItem("gem"))<price){
+        myApp.dialog.confirm(price+" Gem required to unlock! Buy gem?", function () {
+            myApp.dialog.alert('Buy Feature not available');
+        });
+    }else{
+        myApp.dialog.confirm("Use "+price+" Gem to unlock?", function () {
+            localStorage.setItem("partlock"+indexcat+"|"+indexthread, "unlock");
+            myApp.dialog.alert("Thread unlocked");
+            addGem(-price);
+            $$("#lockbutton"+indexcat+"|"+indexthread).addClass("hide");
+            $$("#openbutton"+indexcat+"|"+indexthread).removeClass("hide");
+        });
+    }
 }

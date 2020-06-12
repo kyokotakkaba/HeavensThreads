@@ -197,11 +197,11 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 				}else{
 					content = content + 
 					"<div>"+
-					"<button class='col button button-fill color-gray' onclick='lockedThread("+idxcat+","+idxthr+","+thr.price+")'>"+thr.price+" Gem to unlock</button>"+
+					"<button class='col button button-fill color-gray' id='lockbutton"+idxcat+"|"+idxthr+"' onclick='lockedThread("+idxcat+","+idxthr+","+thr.price+")'>"+thr.price+" Gem to unlock</button>"+
 					"</div>";
 					content = content + 
 					"<div>"+
-					"<button class='col button button-fill color-black hide' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
+					"<button class='col button button-fill color-black hide' id='openbutton"+idxcat+"|"+idxthr+"' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
 					"</div>";
 				}
 
