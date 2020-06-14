@@ -173,6 +173,8 @@ function refreshFreeGem(){
 }
 
 var threadlistData;
+var currentIndexcat;
+var currentIndexthread;
 function openThread(indexcat,indexthread){
     if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))==null){
         $$("#category"+(indexcat+1)).removeClass("hide");
@@ -190,8 +192,14 @@ function openThread(indexcat,indexthread){
         }
     }
 
-    myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
+
+    // myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
     //to do here
+    currentIndexcat = indexcat;
+    currentIndexthread = indexthread;
+    mainView.router.load({
+        url:"pages/content.html"
+    });
     
 }
 

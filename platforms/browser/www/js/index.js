@@ -173,9 +173,9 @@ function refreshFreeGem(){
 }
 
 var threadlistData;
+var currentIndexcat;
+var currentIndexthread;
 function openThread(indexcat,indexthread){
-    myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
-    //to do here
     if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))==null){
         $$("#category"+(indexcat+1)).removeClass("hide");
         $$("#part"+(indexcat+1)+"|"+0).removeClass("hide");
@@ -184,15 +184,22 @@ function openThread(indexcat,indexthread){
             localStorage.setItem("parthide"+(indexcat+1)+"|"+0, "show");
             syncSave(localStorage.getItem("username"), false);
         }
-        
     }else{
         $$("#part"+indexcat+"|"+(indexthread+1)).removeClass("hide");
         if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))!="show") {
             localStorage.setItem("parthide"+indexcat+"|"+(indexthread+1), "show");
             syncSave(localStorage.getItem("username"), false);
         }
-        
     }
+
+
+    // myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
+    //to do here
+    currentIndexcat = indexcat;
+    currentIndexthread = indexthread;
+    mainView.router.load({
+        url:"pages/content.html"
+    });
     
 }
 

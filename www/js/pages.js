@@ -240,3 +240,10 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 		});
 	});
 });
+
+
+
+
+$$(document).on('page:init', '.page[data-name="content"]', function (e, page) {
+	$$('#thread-title').html(threadlistData[currentIndexcat].threads[currentIndexthread].title);
+});

@@ -5,6 +5,7 @@
 				"fileid": "SU1-Robert",
 				"postedby": "anonymous",
 				"players": [],
+				"position": {},
 				"price": 0
 			},
 			{
@@ -12,6 +13,7 @@
 				"fileid": "SU2-Denied",
 				"postedby": "anonymous",
 				"players": [],
+				"position": {},
 				"price": 0
 			},
 			{
@@ -19,6 +21,7 @@
 				"fileid": "SU3-Odo",
 				"postedby": "anonymous",
 				"players": [],
+				"position": {},
 				"price": 0
 			},
 			{
@@ -26,6 +29,7 @@
 				"fileid": "SU4-Spectator",
 				"postedby": "anonymous",
 				"players": [],
+				"position": {},
 				"price": 0
 			}
 		]
@@ -37,6 +41,17 @@
 				"fileid": "HW1-intro",
 				"postedby": "Heavenwing4",
 				"players": ["AsOuReN", "SakuraFei"],
+				"position": {
+					"Heavenwing4":"Admin",
+					"Rustysword":"Admin",
+					"AsOuReN":"Player",
+					"SakuraFei":"Player",
+					"PorscheeeeeE":"Spectator",
+					"ChocolateQueen":"Spectator",
+					"Riveries":"Spectator",
+					"Aririkushishifu":"Spectator",
+					"StarCrush":"Spectator"
+				},
 				"price": 0
 			},
 			{
@@ -44,6 +59,17 @@
 				"fileid": "HW2-changefamily",
 				"postedby": "Rustysword",
 				"players": ["AsOuReN", "SakuraFei", "StarCrush"],
+				"position": {
+					"Heavenwing4":"Admin",
+					"Rustysword":"Admin",
+					"AsOuReN":"Player",
+					"SakuraFei":"Player",
+					"PorscheeeeeE":"Spectator",
+					"ChocolateQueen":"Spectator",
+					"Riveries":"Spectator",
+					"Aririkushishifu":"Spectator",
+					"StarCrush":"Spectator"
+				},
 				"price": 0
 			},
 			{
@@ -51,6 +77,17 @@
 				"fileid": "HW3-shareworld",
 				"postedby": "Heavenwing4",
 				"players": ["AsOuReN", "SakuraFei", "StarCrush"],
+				"position": {
+					"Heavenwing4":"Admin",
+					"Rustysword":"Admin",
+					"AsOuReN":"Player",
+					"SakuraFei":"Player",
+					"PorscheeeeeE":"Spectator",
+					"ChocolateQueen":"Spectator",
+					"Riveries":"Spectator",
+					"Aririkushishifu":"Spectator",
+					"StarCrush":"Spectator"
+				},
 				"price": 5
 			},
 			{
@@ -58,6 +95,17 @@
 				"fileid": "HW4-changeworld",
 				"postedby": "Rustysword",
 				"players": ["AsOuReN", "SakuraFei", "Aririkushishifu"],
+				"position": {
+					"Heavenwing4":"Admin",
+					"Rustysword":"Admin",
+					"AsOuReN":"Player",
+					"SakuraFei":"Player",
+					"PorscheeeeeE":"Spectator",
+					"ChocolateQueen":"Spectator",
+					"Riveries":"Spectator",
+					"Aririkushishifu":"Spectator",
+					"StarCrush":"Spectator"
+				},
 				"price": 10
 			},
 			{
@@ -65,6 +113,17 @@
 				"fileid": "HW5-shareworld2",
 				"postedby": "Heavenwing4",
 				"players": ["AsOuReN", "SakuraFei", "Aririkushishifu"],
+				"position": {
+					"Heavenwing4":"Admin",
+					"Rustysword":"Admin",
+					"AsOuReN":"Player",
+					"SakuraFei":"Player",
+					"PorscheeeeeE":"Spectator",
+					"ChocolateQueen":"Spectator",
+					"Riveries":"Spectator",
+					"Aririkushishifu":"Spectator",
+					"StarCrush":"Spectator"
+				},
 				"price": 10
 			},
 			{
@@ -72,6 +131,17 @@
 				"fileid": "HW6-hell",
 				"postedby": "Aririkushishifu",
 				"players": ["AsOuReN", "SakuraFei"],
+				"position": {
+					"Heavenwing4":"Admin",
+					"Rustysword":"Admin",
+					"AsOuReN":"Player",
+					"SakuraFei":"Player",
+					"PorscheeeeeE":"Spectator",
+					"ChocolateQueen":"Spectator",
+					"Riveries":"Spectator",
+					"Aririkushishifu":"Spectator",
+					"StarCrush":"Spectator"
+				},
 				"price": 10
 			}
 		]
