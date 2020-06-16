@@ -133,13 +133,6 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 
 	$$('#rewardvideoads').html("Watch Video for free gem : "+ localStorage.getItem("freeGemQuota"));
 
-	// $.get('files/test.txt', function(textData, status) {
-	// 	var aLines = textData.split("\n")
-	// 	$.each(aLines, function(n, sLine) {
-	// 		$('#textFromFile').append( sLine + '<br>');
-	// 	});
-	// }, 'text');
-
 	//first category must be showed
 	if (localStorage.getItem("categoryhide"+0)==null){
 		localStorage.setItem("categoryhide"+0,"show");
@@ -234,10 +227,7 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 
 
 	$$('#logoutbutton').on('click', function(){
-		localStorage.clear();
-		mainView.router.load({
-			url:"pages/welcome/welcome.html"
-		});
+		logout();
 	});
 });
 
@@ -246,4 +236,33 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 
 $$(document).on('page:init', '.page[data-name="content"]', function (e, page) {
 	$$('#thread-title').html(threadlistData[currentIndexcat].threads[currentIndexthread].title);
+
+	$.get('files/'+threadlistData[currentIndexcat].threads[currentIndexthread].fileid+'.txt', function(textData, status) {
+		var aLines = textData.split("\n");
+		content = "";
+		aLines.forEach(function(textline, idxline){
+			if(textline.charAt(0) == "#"){
+				player = textline.substring(1).trim();
+				position = threadlistData[currentIndexcat].threads[currentIndexthread].position[player];
+				if (position === undefined) {position = "";}
+				if (idxline>0) {
+					content = content + "</div></div>"; //close body and container
+				}
+				content = content + 
+				"<div style='border-style: solid; margin:2px; margin-bottom:30px;' class='postcontainer'>"+
+				"<div style='border-style: solid;' class='posthead'>"+
+				"<img src='img/playericon/"+player+".png' width='20px'></img>"+player+
+				"<div>"+position+"</div>"+
+				"</div>"+
+				"<div class='postbody'>";
+			}else{
+				content = content + "<div>"+ textline.trim() + "</div>";
+			}
+		});
+		content = content + "</div></div>"; //close body and container
+		$$('#thread-content').append(content);
+	}, 'text');
+
+
+
 });

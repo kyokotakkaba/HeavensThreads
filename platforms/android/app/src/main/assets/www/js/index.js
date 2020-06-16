@@ -110,49 +110,65 @@ function syncLoad(username, onsuccess, onerror){
     db.collection("users").doc(username).get().then(function(doc) {
         if (doc.exists) {
             myApp.preloader.hide();
-            localStorage.setItem("gem",doc.data().gem);
+            for (var i=0;i<Object.keys(doc.data().progress).length;i++){
+                localStorage.setItem(Object.keys(doc.data().progress)[i],Object.values(doc.data().progress)[i]);
+            }
             onsuccess();
         } else {
             myApp.preloader.hide();
-            myApp.dialog.alert("Error: username tidak ada");
+            myApp.dialog.alert("Load Gagal: username tidak ada");
             onerror();
         }
     }).catch(function(error) {
         myApp.preloader.hide();
-        myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);
+        myApp.dialog.alert("Load gagal<br><br>" + error);
         onerror();
     });
 }
 
-function syncSave(username){
-    myApp.preloader.show();
+function syncSave(username, loading){
+    if (loading) {myApp.preloader.show();}
     db.collection("users").doc(username).get().then(function(doc) {
         if (doc.exists) {
+            data={};
+            for (var i=0;i<localStorage.length;i++){
+                data[localStorage.key(i)]=localStorage.getItem(localStorage.key(i));
+            }
             db.collection("users").doc(username).update({
-                gem: parseInt(localStorage.getItem("gem")),
+                progress: data,
             }).then(function() {
                 myApp.preloader.hide();
-                // myApp.dialog.alert("Save berhasil");
+                console.log("Save berhasil");
             }).catch(function(error) {
                 myApp.preloader.hide();
-                // myApp.dialog.alert("Save gagal<br><br>"+ error);
+                console.log("Save gagal<br><br>"+ error);
+                // if (loading){myApp.dialog.alert("Save gagal<br><br>"+ error);}
             });
         } else {
             myApp.preloader.hide();
-            myApp.dialog.alert("Error: username tidak ada");
+            myApp.dialog.alert("Save gagal: username tidak ada");
+            logout();
         }
     }).catch(function(error) {
         myApp.preloader.hide();
-        myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);
+        console.log("Save gagal<br><br>" + error);
+        // if (loading) {myApp.dialog.alert("Gagal sinkronisasi<br><br>" + error);}
+        
     });
 }
 
+function logout(){
+    localStorage.clear();
+    mainView.router.load({
+        url:"pages/welcome/welcome.html"
+    });
+}
 
 function addGem(value){
     gems = parseInt(localStorage.getItem("gem")) + value;
     localStorage.setItem("gem",gems);
     $$('#gem').html("gem: "+ localStorage.getItem("gem"));
-    syncSave(localStorage.getItem("username"));
+    syncSave(localStorage.getItem("username"), true);
 }
 
 
@@ -164,10 +180,45 @@ function refreshFreeGem(){
 }
 
 var threadlistData;
+var currentIndexcat;
+var currentIndexthread;
 function openThread(indexcat,indexthread){
-    myApp.dialog.alert(threadlistData[indexcat].threads[indexthread].fileid+".txt");
+    if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))==null){
+        $$("#category"+(indexcat+1)).removeClass("hide");
+        $$("#part"+(indexcat+1)+"|"+0).removeClass("hide");
+        if (localStorage.getItem("parthide"+(indexcat+1)+"|"+0)!="show" || localStorage.getItem("categoryhide"+(indexcat+1))!="show") {
+            localStorage.setItem("categoryhide"+(indexcat+1), "show");
+            localStorage.setItem("parthide"+(indexcat+1)+"|"+0, "show");
+            syncSave(localStorage.getItem("username"), false);
+        }
+    }else{
+        $$("#part"+indexcat+"|"+(indexthread+1)).removeClass("hide");
+        if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))!="show") {
+            localStorage.setItem("parthide"+indexcat+"|"+(indexthread+1), "show");
+            syncSave(localStorage.getItem("username"), false);
+        }
+    }
+
+    currentIndexcat = indexcat;
+    currentIndexthread = indexthread;
+    mainView.router.load({
+        url:"pages/content.html"
+    });
+    
 }
 
 function lockedThread(indexcat,indexthread, price){
-    myApp.dialog.alert("Locked! Required "+price+" Gem to unlock<br>"+threadlistData[indexcat].threads[indexthread].fileid+".txt");
+    if (parseInt(localStorage.getItem("gem"))<price){
+        myApp.dialog.confirm(price+" Gem required to unlock! Buy gem?", function () {
+            myApp.dialog.alert('Buy Feature not available');
+        });
+    }else{
+        myApp.dialog.confirm("Use "+price+" Gem to unlock?", function () {
+            localStorage.setItem("partlock"+indexcat+"|"+indexthread, "unlock");
+            myApp.dialog.alert("Thread unlocked");
+            addGem(-price);
+            $$("#lockbutton"+indexcat+"|"+indexthread).addClass("hide");
+            $$("#openbutton"+indexcat+"|"+indexthread).removeClass("hide");
+        });
+    }
 }

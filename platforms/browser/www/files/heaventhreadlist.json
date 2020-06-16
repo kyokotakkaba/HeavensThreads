@@ -3,7 +3,7 @@
 		"threads": [{
 				"title": "Robert B. Miller",
 				"fileid": "SU1-Robert",
-				"postedby": "anonymous",
+				"postedby": "Anonymous",
 				"players": [],
 				"position": {},
 				"price": 0
@@ -11,7 +11,7 @@
 			{
 				"title": "Denied",
 				"fileid": "SU2-Denied",
-				"postedby": "anonymous",
+				"postedby": "Anonymous",
 				"players": [],
 				"position": {},
 				"price": 0
@@ -19,7 +19,7 @@
 			{
 				"title": "Odo Riquier",
 				"fileid": "SU3-Odo",
-				"postedby": "anonymous",
+				"postedby": "Anonymous",
 				"players": [],
 				"position": {},
 				"price": 0
@@ -27,7 +27,7 @@
 			{
 				"title": "Spectator",
 				"fileid": "SU4-Spectator",
-				"postedby": "anonymous",
+				"postedby": "Anonymous",
 				"players": [],
 				"position": {},
 				"price": 0
