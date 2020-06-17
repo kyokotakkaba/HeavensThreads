@@ -48,13 +48,9 @@
         setTimeout(function(){ 
             //if logged in
             if (localStorage.getItem("username")!=null){
-                mainView.router.load({
-                    url:"pages/home.html"
-                });
+                mainView.router.navigate('/home/');
             }else{
-                mainView.router.load({
-                    url:"pages/welcome/welcome.html"
-                });
+                mainView.router.navigate('/welcome/');
             } 
         }, 3000);
 
@@ -159,9 +155,7 @@ function syncSave(username, loading){
 
 function logout(){
     localStorage.clear();
-    mainView.router.load({
-        url:"pages/welcome/welcome.html"
-    });
+    mainView.router.navigate('/welcome/');
 }
 
 function addGem(value){
@@ -182,7 +176,8 @@ function refreshFreeGem(){
 var threadlistData;
 var currentIndexcat;
 var currentIndexthread;
-function openThread(indexcat,indexthread){
+
+function showNextThread(indexcat,indexthread){
     if (localStorage.getItem("parthide"+indexcat+"|"+(indexthread+1))==null){
         $$("#category"+(indexcat+1)).removeClass("hide");
         $$("#part"+(indexcat+1)+"|"+0).removeClass("hide");
@@ -198,13 +193,22 @@ function openThread(indexcat,indexthread){
             syncSave(localStorage.getItem("username"), false);
         }
     }
+}
 
+function openThread(indexcat,indexthread){
+    showNextThread(indexcat,indexthread);
     currentIndexcat = indexcat;
     currentIndexthread = indexthread;
-    mainView.router.load({
-        url:"pages/content.html"
-    });
+    mainView.router.navigate('/content/');
     
+}
+
+function unlockThread(indexcat,indexthread, price){
+    localStorage.setItem("partlock"+indexcat+"|"+indexthread, "unlock");
+    myApp.dialog.alert("Thread unlocked");
+    addGem(-price);
+    $$("#lockbutton"+indexcat+"|"+indexthread).addClass("hide");
+    $$("#openbutton"+indexcat+"|"+indexthread).removeClass("hide");
 }
 
 function lockedThread(indexcat,indexthread, price){
@@ -214,11 +218,36 @@ function lockedThread(indexcat,indexthread, price){
         });
     }else{
         myApp.dialog.confirm("Use "+price+" Gem to unlock?", function () {
-            localStorage.setItem("partlock"+indexcat+"|"+indexthread, "unlock");
-            myApp.dialog.alert("Thread unlocked");
-            addGem(-price);
-            $$("#lockbutton"+indexcat+"|"+indexthread).addClass("hide");
-            $$("#openbutton"+indexcat+"|"+indexthread).removeClass("hide");
+            unlockThread(indexcat,indexthread, price);
+        });
+    }
+}
+
+
+function openNextThread(indexcat,indexthread){
+    showNextThread(indexcat,indexthread);
+    currentIndexcat = indexcat;
+    currentIndexthread = indexthread;
+    mainView.router.navigate('/content/', {
+      reloadCurrent: true,
+      ignoreCache: true
+  });
+    
+
+    
+}
+
+
+function lockedNextThread(indexcat,indexthread, price){
+    if (parseInt(localStorage.getItem("gem"))<price){
+        myApp.dialog.confirm(price+" Gem required to unlock! Buy gem?", function () {
+            myApp.dialog.alert('Buy Feature not available');
+        });
+    }else{
+        myApp.dialog.confirm("Use "+price+" Gem to unlock?", function () {
+            unlockThread(indexcat,indexthread, price);
+            $$("#lockNextbutton"+indexcat+"|"+indexthread).addClass("hide");
+            $$("#openNextbutton"+indexcat+"|"+indexthread).removeClass("hide");
         });
     }
 }

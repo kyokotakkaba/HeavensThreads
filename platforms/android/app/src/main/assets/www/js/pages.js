@@ -1,15 +1,11 @@
 $$(document).on('page:init', '.page[data-name="welcome"]', function (e, page) {
 	mainView.router.clearPreviousHistory();
 	$$('#registerbutton').on('click', function(){
-		mainView.router.load({
-			url:"pages/welcome/register.html"
-		});
+		mainView.router.navigate('/register/');
 	});
 
 	$$('#loginbutton').on('click', function(){
-		mainView.router.load({
-			url:"pages/welcome/login.html"
-		});
+		mainView.router.navigate('/login/');
 	});
 });
 
@@ -45,9 +41,7 @@ $$(document).on('page:init', '.page[data-name="register"]', function (e, page) {
 								myApp.dialog.alert("Registrasi Berhasil");
 								localStorage.setItem("username",formData.username);
 								localStorage.setItem("gem",0);
-								mainView.router.load({
-									url:"pages/home.html"
-								});
+								mainView.router.navigate('/home/');
 							}).catch(function(error) {
 								myApp.preloader.hide();
 								myApp.dialog.alert("Registrasi gagal<br><br>"+ error);
@@ -82,9 +76,7 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e, page) {
 						syncLoad(formData.username, 
 							function(){
 								// localStorage.setItem("username",formData.username);
-								mainView.router.load({
-									url:"pages/home.html"
-								});
+								mainView.router.navigate('/home/');
 							}, 
 							function(){
 								myApp.dialog.alert("Sinkronisasi Gagal");
@@ -263,6 +255,21 @@ $$(document).on('page:init', '.page[data-name="content"]', function (e, page) {
 		$$('#thread-content').append(content);
 	}, 'text');
 
+	if (localStorage.getItem("parthide"+currentIndexcat+"|"+(currentIndexthread+1))==null){
+        nextIndexcat = currentIndexcat + 1;
+        nextIndexthread = 0;
+    }else{
+        nextIndexcat = currentIndexcat;
+        nextIndexthread = currentIndexthread+1;
+    }
 
+    nextprice = threadlistData[nextIndexcat].threads[nextIndexthread].price;
+	if (nextprice<=0 || localStorage.getItem("partlock"+nextIndexcat+"|"+nextIndexthread)=="unlock") {
+		content = "<button class='col button button-fill color-black' onclick='openNextThread("+nextIndexcat+","+nextIndexthread+")'>Next Thread</button>";
+	}else{
+		content = "<button class='col button button-fill color-gray' id='lockNextbutton"+nextIndexcat+"|"+nextIndexthread+"' onclick='lockedNextThread("+nextIndexcat+","+nextIndexthread+","+nextprice+")'>"+nextprice+" Gem to unlock</button>";
+		content = content + "<button class='col button button-fill color-black hide' id='openNextbutton"+nextIndexcat+"|"+nextIndexthread+"' onclick='openNextThread("+nextIndexcat+","+nextIndexthread+")'>Next Thread</button>";
+	}
+	$$('#thread-next').append(content);
 
 });
