@@ -7,7 +7,12 @@ var myApp = new Framework7({
   id: 'com.rurumustudio.heavensthreads',
 
   navbar: {
-    mdCenterTitle: true,
+  	mdCenterTitle: true,
+  },
+
+  view: {
+    pushState: true,
+    pushStateSeparator: '#',
   },
 
   // Enable swipe panel
@@ -16,26 +21,26 @@ var myApp = new Framework7({
   // },
   // Add default routes
   routes: [
-    {
-      path: '/welcome/',
-      url: 'pages/welcome/welcome.html',
-    },
-    {
-      path: '/login/',
-      url: 'pages/welcome/login.html',
-    },
-    {
-      path: '/register/',
-      url: 'pages/welcome/register.html',
-    },
-    {
-      path: '/home/',
-      url: 'pages/home.html',
-    },
-    {
-      path: '/content/',
-      url: 'pages/content.html',
-    },
+  {
+  	path: '/welcome/',
+  	url: 'pages/welcome/welcome.html',
+  },
+  {
+  	path: '/login/',
+  	url: 'pages/welcome/login.html',
+  },
+  {
+  	path: '/register/',
+  	url: 'pages/welcome/register.html',
+  },
+  {
+  	path: '/home/',
+  	url: 'pages/home.html',
+  },
+  {
+  	path: '/content/',
+  	url: 'pages/content.html',
+  },
   ],
   // ... other parameters
 });
