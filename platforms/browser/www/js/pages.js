@@ -1,15 +1,11 @@
 $$(document).on('page:init', '.page[data-name="welcome"]', function (e, page) {
 	mainView.router.clearPreviousHistory();
 	$$('#registerbutton').on('click', function(){
-		mainView.router.load({
-			url:"pages/welcome/register.html"
-		});
+		mainView.router.navigate('/register/');
 	});
 
 	$$('#loginbutton').on('click', function(){
-		mainView.router.load({
-			url:"pages/welcome/login.html"
-		});
+		mainView.router.navigate('/login/');
 	});
 });
 
@@ -33,7 +29,6 @@ $$(document).on('page:init', '.page[data-name="register"]', function (e, page) {
 							db.collection("users").doc(formData.username).set({
 								username: formData.username,
 								password: formData.password,
-								gem: 0,
 								survey: {
 									alasanmendaftar: formData.alasanmendaftar,
 									apakahmembusuk: formData.apakahmembusuk,
@@ -46,9 +41,7 @@ $$(document).on('page:init', '.page[data-name="register"]', function (e, page) {
 								myApp.dialog.alert("Registrasi Berhasil");
 								localStorage.setItem("username",formData.username);
 								localStorage.setItem("gem",0);
-								mainView.router.load({
-									url:"pages/home.html"
-								});
+								mainView.router.navigate('/home/');
 							}).catch(function(error) {
 								myApp.preloader.hide();
 								myApp.dialog.alert("Registrasi gagal<br><br>"+ error);
@@ -80,14 +73,14 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e, page) {
 				if (doc.exists) {
 					if (doc.data().password == formData.password) {
 						myApp.preloader.hide();
-						localStorage.setItem("username",formData.username);
 						syncLoad(formData.username, 
 							function(){
-								mainView.router.load({
-									url:"pages/home.html"
-								});
+								// localStorage.setItem("username",formData.username);
+								mainView.router.navigate('/home/');
 							}, 
-							function(){});	
+							function(){
+								myApp.dialog.alert("Sinkronisasi Gagal");
+							});	
 					}else{
 						myApp.preloader.hide();
 						myApp.dialog.alert("Login Gagal");
@@ -131,13 +124,6 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 	}
 
 	$$('#rewardvideoads').html("Watch Video for free gem : "+ localStorage.getItem("freeGemQuota"));
-
-	// $.get('files/test.txt', function(textData, status) {
-	// 	var aLines = textData.split("\n")
-	// 	$.each(aLines, function(n, sLine) {
-	// 		$('#textFromFile').append( sLine + '<br>');
-	// 	});
-	// }, 'text');
 
 	//first category must be showed
 	if (localStorage.getItem("categoryhide"+0)==null){
@@ -196,11 +182,11 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 				}else{
 					content = content + 
 					"<div>"+
-					"<button class='col button button-fill color-gray' onclick='lockedThread("+idxcat+","+idxthr+","+thr.price+")'>"+thr.price+" Gem to unlock</button>"+
+					"<button class='col button button-fill color-gray' id='lockbutton"+idxcat+"|"+idxthr+"' onclick='lockedThread("+idxcat+","+idxthr+","+thr.price+")'>"+thr.price+" Gem to unlock</button>"+
 					"</div>";
 					content = content + 
 					"<div>"+
-					"<button class='col button button-fill color-black hide' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
+					"<button class='col button button-fill color-black hide' id='openbutton"+idxcat+"|"+idxthr+"' onclick='openThread("+idxcat+","+idxthr+")'>Start spectating</button>"+
 					"</div>";
 				}
 
@@ -233,9 +219,57 @@ $$(document).on('page:init', '.page[data-name="home"]', function (e, page) {
 
 
 	$$('#logoutbutton').on('click', function(){
-		localStorage.clear();
-		mainView.router.load({
-			url:"pages/welcome/welcome.html"
-		});
+		logout();
 	});
+});
+
+
+
+
+$$(document).on('page:init', '.page[data-name="content"]', function (e, page) {
+	$$('#thread-title').html(threadlistData[currentIndexcat].threads[currentIndexthread].title);
+
+	$.get('files/'+threadlistData[currentIndexcat].threads[currentIndexthread].fileid+'.txt', function(textData, status) {
+		var aLines = textData.split("\n");
+		content = "";
+		aLines.forEach(function(textline, idxline){
+			if(textline.charAt(0) == "#"){
+				player = textline.substring(1).trim();
+				position = threadlistData[currentIndexcat].threads[currentIndexthread].position[player];
+				if (position === undefined) {position = "";}
+				if (idxline>0) {
+					content = content + "</div></div>"; //close body and container
+				}
+				content = content + 
+				"<div style='border-style: solid; margin:2px; margin-bottom:30px;' class='postcontainer'>"+
+				"<div style='border-style: solid;' class='posthead'>"+
+				"<img src='img/playericon/"+player+".png' width='20px'></img>"+player+
+				"<div>"+position+"</div>"+
+				"</div>"+
+				"<div class='postbody'>";
+			}else{
+				content = content + "<div>"+ textline.trim() + "</div>";
+			}
+		});
+		content = content + "</div></div>"; //close body and container
+		$$('#thread-content').append(content);
+	}, 'text');
+
+	if (localStorage.getItem("parthide"+currentIndexcat+"|"+(currentIndexthread+1))==null){
+        nextIndexcat = currentIndexcat + 1;
+        nextIndexthread = 0;
+    }else{
+        nextIndexcat = currentIndexcat;
+        nextIndexthread = currentIndexthread+1;
+    }
+
+    nextprice = threadlistData[nextIndexcat].threads[nextIndexthread].price;
+	if (nextprice<=0 || localStorage.getItem("partlock"+nextIndexcat+"|"+nextIndexthread)=="unlock") {
+		content = "<button class='col button button-fill color-black' onclick='openNextThread("+nextIndexcat+","+nextIndexthread+")'>Next Thread</button>";
+	}else{
+		content = "<button class='col button button-fill color-gray' id='lockNextbutton"+nextIndexcat+"|"+nextIndexthread+"' onclick='lockedNextThread("+nextIndexcat+","+nextIndexthread+","+nextprice+")'>"+nextprice+" Gem to unlock</button>";
+		content = content + "<button class='col button button-fill color-black hide' id='openNextbutton"+nextIndexcat+"|"+nextIndexthread+"' onclick='openNextThread("+nextIndexcat+","+nextIndexthread+")'>Next Thread</button>";
+	}
+	$$('#thread-next').append(content);
+
 });
